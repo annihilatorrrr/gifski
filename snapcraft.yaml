@@ -5,8 +5,11 @@ description: |
    Squeezes maximum possible quality from the awful
    GIF format. https://gif.ski
 
-base: core20
-version: 1.33.0
+version: 0.0.0-gifski-snap-version-override
+adopt-info: gifski-snap-version-override
+
+grade: stable
+base: core22
 confinement: strict
 
 apps:
@@ -17,6 +20,14 @@ apps:
     - removable-media
 
 parts:
+  gifski-snap-version-override:
+    plugin: nil
+    after: [gifski]
+    build-packages:
+      - git
+    override-pull: |
+      snapcraftctl set-version $(git -C "$SNAPCRAFT_PART_SRC" describe --tags --always)
+
   gifski:
     source: https://github.com/ImageOptim/gifski.git
     plugin: rust
